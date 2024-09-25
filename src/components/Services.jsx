@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Book1 from "../assets/books/book1.jpg";
 import Book2 from "../assets/books/book2.jpg";
 import Book3 from "../assets/books/book3.jpg";
-import Book4 from "../assets/books/book4.jpg";
-import Book5 from "../assets/books/book5.jpg";
-import Book6 from "../assets/books/book6.jpg";
 import { FaStar } from "react-icons/fa";
+import SubscriptionModal from "./SubscriptionModal";
 
 const ServicesData = [
     {
@@ -22,7 +20,7 @@ const ServicesData = [
         title: "Think and Grow Rich",
         author: "Napoleon Hill",
         description:
-            "Think and Grow Rich is a book written by Napoleon Hill and Rosa Lee Beeland released in 1937 and promoted as a personal development and self-improvement book. He claimed to be inspired by a suggestion from business magnate and later-philanthropist Andrew Carnegie.",
+            "Think and Grow Rich is a book written by Napoleon Hill and Rosa Lee Beeland released in 1937 and promoted as a personal development and self-improvement book.",
     },
     {
         id: 3,
@@ -30,35 +28,24 @@ const ServicesData = [
         title: "The Power of a Positive Attitude",
         author: "Roger Fritz",
         description:
-            "Attitude affects every facet of our lives—from the way we handle stress to how we communicate at work. The way we view difficulties and setbacks can make the difference between success and failure. Roger Fritz has devoted his career to helping people overcome obstacles and achieve their goals by changing their outlook on life.",
+            "Attitude affects every facet of our lives. Roger Fritz has devoted his career to helping people overcome obstacles and achieve their goals by changing their outlook on life.",
     },
-    {
-        id: 4,
-        img: Book4,
-        title: "Learning How to Fly",
-        author: "Dr. A.P.J. Abdul Kalam",
-        description:
-            "Life Lessons for the Youth by Dr. A.P.J. Abdul Kalam, India's former President and renowned scientist, is a book that shares life lessons for young people.",
-    },
-    {
-        id: 5,
-        img: Book5,
-        title: "The Mountain Is You: Transforming Self-Sabotage Into Self-Mastery",
-        author: "Brianna Wiest",
-        description:
-            " In this book, Wiest addresses the internal obstacles we create that prevent us from achieving our goals. She provides practical advice on overcoming self-sabotage by understanding our behaviors and thoughts, empowering readers to harness their potential and achieve personal mastery.",
-    },
-    {
-        id: 6,
-        img: Book6,
-        title: "Don't Believe Everything You Think",
-        author: "Thomas E. Brown",
-        description:
-            "This book delves into the nature of our thoughts and how they can shape our emotions and behaviors. Brown offers insights into cognitive distortions and encourages readers to challenge negative thoughts, promoting healthier thinking patterns to improve mental well-being.",
-    },    
 ];
 
-const Services = ({ handleOrderPopup }) => {
+const Services = () => {
+  const [isSubscriptionOpen, setSubscriptionOpen] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(null);
+
+  const handleReadBook = (book) => {
+    setSelectedBook(book);
+    setSubscriptionOpen(true);
+  };
+
+  const handleCloseSubscription = () => {
+    setSubscriptionOpen(false);
+    setSelectedBook(null);
+  };
+
   return (
     <>
       <span id="services"></span>
@@ -77,7 +64,7 @@ const Services = ({ handleOrderPopup }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-20 md:gap-5 place-items-center">
             {ServicesData.map((service) => (
               <div
-                data-aos="zoom-in"
+                key={service.id}
                 className="rounded-2xl bg-white dark:bg-gray-800 hover:bg-primary dark:hover:bg-primary hover:text-white relative shadow-xl duration-high group max-w-[300px]"
               >
                 <div className="h-[100px]">
@@ -85,7 +72,7 @@ const Services = ({ handleOrderPopup }) => {
                     src={service.img}
                     alt=""
                     className="max-w-[100px] block mx-auto transform -translate-y-14
-                  group-hover:scale-105  duration-300 shadow-md"
+                  group-hover:scale-105 duration-300 shadow-md"
                   />
                 </div>
                 <div className="p-4 text-center">
@@ -101,9 +88,9 @@ const Services = ({ handleOrderPopup }) => {
                   </p>
                   <button
                     className="bg-primary hover:scale-105 duration-300 text-white py-1 px-4 rounded-full mt-4 group-hover:bg-white group-hover:text-primary"
-                    onClick={handleOrderPopup}
+                    onClick={() => handleReadBook(service)}
                   >
-                    Order Now
+                    Read This Book
                   </button>
                 </div>
               </div>
@@ -111,6 +98,9 @@ const Services = ({ handleOrderPopup }) => {
           </div>
         </div>
       </div>
+
+      {/* Subscription Modal for subscription requirement */}
+      <SubscriptionModal isOpen={isSubscriptionOpen} onClose={handleCloseSubscription} />
     </>
   );
 };
